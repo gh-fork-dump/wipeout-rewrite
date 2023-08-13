@@ -30,11 +30,8 @@
 	#include <windows.h>
 
 	#define GL3_PROTOTYPES 1
-	#include <glew.h>
-	#pragma comment(lib, "glew32.lib")
-
-	#include <gl/GL.h>
-	#pragma comment(lib, "opengl32.lib")
+	#include <GL/glew.h>
+	#include <GL/gl.h>
 #endif
 
 
