@@ -1,4 +1,13 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND VITA)
+  if(DEFINED ENV{VITASDK})
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
+  else()
+    message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
+  endif()
+endif()
+
 project(wipeout-rewrite)
 
 include(GNUInstallDirs)
@@ -108,6 +117,44 @@ elseif(APPLE)
 		)
 		set_source_files_properties(src/platform_sokol.c PROPERTIES COMPILE_FLAGS "-x objective-c")
 	endif()
+elseif(VITA)
+	include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
+	target_link_libraries(wipegame
+		PRIVATE
+		vitaGL
+		mathneon
+		vitashark
+		SceShaccCgExt
+		taihen_stub
+		SceKernelDmacMgr_stub
+		SceShaccCg_stub
+		SceAudioIn_stub
+		SceAppMgr_stub
+		SceIme_stub_weak
+		SceMotion_stub
+		SceCommonDialog_stub
+		SceHid_stub
+		SceGxm_stub
+		SceAudio_stub
+		ScePower_stub
+		SceDisplay_stub
+		SceCtrl_stub
+		SceTouch_stub
+		SceIofilemgr_stub
+		SceVshBridge_stub
+		SceSysmodule_stub
+		m
+		pthread
+		)
+	set(VITA_APP_NAME "wipEout")
+	set(VITA_TITLEID  "WPEOUT01")
+	set(VITA_VERSION  "01.00")
+	set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d ATTRIBUTE2=12")
+	vita_create_self(wipegame.self wipegame UNSAFE)
+	vita_create_vpk(wipegame.vpk ${VITA_TITLEID} wipegame.self
+		VERSION ${VITA_VERSION}
+		NAME ${VITA_APP_NAME}
+	)
 endif()
 
 if(RENDERER_GL)
