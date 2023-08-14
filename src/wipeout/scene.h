@@ -10,6 +10,5 @@ void scene_init();
 void scene_set_start_booms(int num_lights);
 void scene_init_aurora_borealis();
 void scene_update();
-void scene_draw();
 
 #endif

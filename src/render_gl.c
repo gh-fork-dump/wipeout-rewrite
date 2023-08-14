@@ -2,7 +2,7 @@
 // macOS
 #if defined(__APPLE__) && defined(__MACH__)
 	#include <OpenGL/gl.h>
-	#include <OpenGL/glext.h>
+	#include <OpenGL/gl3.h>
 
 	void glCreateTextures(GLuint ignored, GLsizei n, GLuint *name) {
 		glGenTextures(1, name);
